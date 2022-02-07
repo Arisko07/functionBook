@@ -10,7 +10,11 @@ class App extends React.Component {
     array:"",
     sortedArray:[],
     arrayMessage:"Input Target Array and Number",
-    number:""
+    number:"",
+    randomArray:"",
+    randomResult:[],
+    uniqueArray:"",
+    uniqueResult:[]
   };
   handleChange = (e) => {        
     const formatCheck = /^[0-9\b]+$/;
@@ -42,6 +46,27 @@ class App extends React.Component {
     else if(sortedArray.includes(targetNumber)){this.setState({arrayMessage: "This array contains the target number"});}    
     else{this.setState({arrayMessage: "This array does not contain the target number"});}
     
+  }  
+  randomizeArray = (e) =>{
+    var array = e.target.value;
+    this.setState({randomArray:array})
+    array = array.split(",");
+    
+    for (var i = array.length - 1; i > 0; i--) {
+      var seed = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[seed];
+      array[seed] = temp;      
+    }
+    
+    this.setState({randomResult: array})        
+  }
+  removeDuplicate = (e) =>{
+    var array = e.target.value;
+    this.setState({uniqueArray:array})
+    array = array.split(",");
+    var uniqueArray = Array.from(new Set(array))
+    this.setState({uniqueResult: uniqueArray})
   }
   render() {
     
@@ -49,7 +74,7 @@ class App extends React.Component {
     <div className="App">
       <header className="App-header">
         <p>
-          Hireplicity
+          Function Collection
         </p>
       </header>
        
@@ -83,8 +108,28 @@ class App extends React.Component {
             onChange={this.checkContain}
           />
         </div>
+        <div className="bottom-panel">
+          <h1>Randomized Array:[{(this.state.randomResult).map((element) => (<span className="user">{element}<span className="limiter">,</span></span>))}]</h1>
+          <TextField
+                required
+                id="outlined-required"
+                label="Target Array (1,2,3)"              
+                value={this.state.randomArray}
+                onChange={this.randomizeArray}
+              />
+        </div>
+        <div className="bottom-panel">
+          <h1>Unique Array:[{(this.state.uniqueResult).map((element) => (<span className="user">{element}<span className="limiter">,</span></span>))}]</h1>
+          <TextField
+                  required
+                  id="outlined-required"
+                  label="Target Array (1,2,3)"              
+                  value={this.state.uniqueArray}
+                  onChange={this.removeDuplicate}
+                />
+        </div>
       </div>
-     
+
     )
   }
 }
